@@ -2,7 +2,6 @@ package com.carleton.ccr.parsing;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,6 +32,7 @@ public class Parser {
 	
 
 	public ArrayList<String> parsePost(String post) {
+		post = post.replaceAll("[,.;]", " ");
 		String[] words = post.split("\\s+");
 		ArrayList<String> coursesInText = new ArrayList<String>();
 		for (int i = 0; i< words.length ; i++) {
@@ -83,11 +83,8 @@ public class Parser {
 	public static void main(String[] args) {
 		Parser p = Parser.getInstance();
 		//ArrayList<String> c = p.parsePost("Hey guys. There's some cool looking courses in the SYSC deparment but it looks like they're restricted to SYSC students. Is is possible for somene outside the program to take them? The COMP offerings are pretty dismal for low-level programming and hardware applications.Alternatively if anyone knows any good courses along that route in the COMP department I'm all ears");
-		//ArrayList<String> c = p.parsePost("Hahahaha (barely managing) Honestly COMS3004 isn’t that bad. Memorize the slides so you can quickly lookup the things you can’t recall. Have your notes divided in a way that’s fast to go through so you can find your answer in O(nlogn) time.Focus on architectur");
+		ArrayList<String> c = p.parsePost("Courses are: Psyc 1001 and adsa  Busi 1002, both are online courses. Is it gonna be easy? Will I have time to breathe/rest?");
 
-		for (String courser : c){
-			System.out.println(courser);
-		}
 	}
 
 }
