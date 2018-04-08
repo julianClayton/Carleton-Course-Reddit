@@ -50,7 +50,7 @@ public class RedditCrawler {
 			    .build();
 
 			// Get a maximum of three pages. Doesn't guarantee that there are three Listings here.
-			List<Listing<Submission>> firstThreePages = paginator.accumulate(10);
+			List<Listing<Submission>> firstThreePages = paginator.accumulate(3);
 			
 		ArrayList<Post> allPosts = new ArrayList<Post>();
 		ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();

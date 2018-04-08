@@ -72,13 +72,6 @@ public class CCR {
 		StringBuilder htmlBuilder = new StringBuilder();
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		ArrayList<String> courselist = new ArrayList<String>(Arrays.asList(query.split("[+]")));
-		String coursecode = "";
-		/*if (courselist.get(0).length() == 8) {
-			coursecode = courselist.get(0).substring(4,8);
-		}
-		if (courselist.size() == 1 && StringUtils.isNumeric(coursecode)) {
-			return "Single Course!";
-		}*/
 		htmlBuilder.append("<html>");
 		htmlBuilder.append("<head><title> Overview of: ");
 		
@@ -97,7 +90,7 @@ public class CCR {
 		htmlBuilder.append("<ul>");	
 		for (Comment comment : comments) {
 			System.out.println(comment.getText());
-			htmlBuilder.append("<li>" + comment.getText() + "</li>");
+			htmlBuilder.append("<li>" + comment.getText() + " " + "<a href=\""+ comment.getUrl() + "\">" + "POST</a>" + "</li>");
 		}
 		htmlBuilder.append("<ul>");
 		return htmlBuilder.toString();
