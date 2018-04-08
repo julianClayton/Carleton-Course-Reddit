@@ -25,7 +25,6 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import com.carleton.ccr.crawler.Comment;
-import com.carleton.ccr.db.DatabaseManager;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
@@ -38,7 +37,8 @@ public class MyLucene {
 	
 	private static final String URL = "url";
 	private static final String DOC_ID = "docId";
-	private static final String DATE = "date";
+	private static final String TITLE = "title";
+	private static final String TYPE = "type";
 	private static final String CONTENT = "content";
 	private static final String TAGS = "tags";
 	
@@ -84,18 +84,25 @@ public class MyLucene {
 
 			String docId = object.get("id").toString();
 			String text = (String)object.get("content");
+			String url = (String)object.get("url");
+			String title = (String)object.get("title");
+			String type = (String)object.get("type");
 			ArrayList<String> tags = (ArrayList<String>) object.get("tags");
 			
 			String tagsString = "";
 			for (String t : tags){
-				System.out.println(t);
 				tagsString += t + " " ;
 			}
 		
-			//System.out.println("Id" + docId + "\nurl: " + url + "\ntext " + text + "\ntype:'" + type + "\ndate:" + ts);
-			lucDoc.add(new	StringField(DOC_ID, docId, Field.Store.YES));	
+			lucDoc.add(new	StringField(DOC_ID, docId, Field.Store.YES));
+			lucDoc.add(new	StringField(URL, url, Field.Store.YES));
 			lucDoc.add(new StringField(CONTENT, text, Field.Store.YES));
+			lucDoc.add(new	StringField(TYPE, type, Field.Store.YES));
 			lucDoc.add(new TextField(TAGS, tagsString, Field.Store.YES));
+			
+			if (type.equals("post")){
+				lucDoc.add(new	StringField(TITLE, title, Field.Store.YES));
+				}
 			
 			writer.addDocument(lucDoc);
 			
@@ -115,8 +122,6 @@ public class MyLucene {
 			TopDocs results = searcher.search(q, 100);
 		 	
 		 	ScoreDoc[]	hits =	results.scoreDocs;
-		 	System.out.println("Length " + hits.length);
-		 	
 		 	
 		 	ArrayList<Comment> courseComments = new ArrayList<Comment>();	
 			
@@ -130,8 +135,14 @@ public class MyLucene {
 			 		String[] tagsArr = tagString.split(" ");
 			 		ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
 			 		
-				 	Comment com = new Comment(indexDoc.get(DOC_ID), indexDoc.get(CONTENT));
+			 		String type = indexDoc.get(TYPE);
+			 		
+				 	Comment com = new Comment( indexDoc.get(DOC_ID), indexDoc.get(URL), indexDoc.get(CONTENT) );
 				 	com.setTags(tags);
+				 	
+				 	if (type.equals("post")){
+				 		com.setTitle(indexDoc.get(TITLE));
+				 	}
 				 	
 				 	courseComments.add(com);
 				 } 		
