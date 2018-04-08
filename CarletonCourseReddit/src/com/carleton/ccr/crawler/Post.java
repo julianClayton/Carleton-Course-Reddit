@@ -36,12 +36,11 @@ public class Post {
 		return title;
 	}
 	
+	public ArrayList<String> getTags(){
+		return tags;
+	}
 	public String getURL(){
 		return url;
-	}
-	
-	public List<String> getTags(){
-		return tags;
 	}
 	
 	public String toString(){
