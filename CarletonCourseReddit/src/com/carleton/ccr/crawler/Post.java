@@ -5,13 +5,15 @@ import java.util.List;
 
 public class Post {
 	String id;
+	String url;
 	String title;
 	String text;
 	ArrayList<String> tags;
 	List<Comment> comments;
 	
-	public Post(String id, String title, String text){
+	public Post(String id, String url, String title, String text){
 		this.id = id;
+		this.url = url;
 		this.title = title;
 		this.text = text;
 		tags = new ArrayList<String>();
@@ -36,6 +38,9 @@ public class Post {
 	
 	public ArrayList<String> getTags(){
 		return tags;
+	}
+	public String getURL(){
+		return url;
 	}
 	
 	public String toString(){

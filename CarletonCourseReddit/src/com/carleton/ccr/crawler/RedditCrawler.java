@@ -50,18 +50,18 @@ public class RedditCrawler {
 			    .build();
 
 			// Get a maximum of three pages. Doesn't guarantee that there are three Listings here.
-			List<Listing<Submission>> firstThreePages = paginator.accumulate(3);
+			List<Listing<Submission>> firstThreePages = paginator.accumulate(10);
 			
 		ArrayList<Post> allPosts = new ArrayList<Post>();
 		ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();
 		CourseParser parser = CourseParser.getInstance();
 		for (Listing<Submission>  page: firstThreePages) {
 			for (Submission s : page){
-				Post currPost = new Post(s.getId(), s.getTitle(), s.getSelfText());
+				Post currPost = new Post(s.getId(), s.getUrl(), s.getTitle(), s.getSelfText());
 				currPost.addTags(parser.parsePost(currPost.getTitle()));
 				currPost.addTags(parser.parsePost(currPost.getText()));
 				db.addPostToDb(currPost);
-				allPosts.add(currPost);
+				//allPosts.add(currPost);
 				SubmissionReference subRef = reddit.submission(s.getId());
 				RootCommentNode root = subRef.comments();
 
@@ -73,7 +73,9 @@ public class RedditCrawler {
 				    // A PublicContribution is either a Submission or a Comment.
 				    PublicContribution<?> thing = it.next().getSubject();
 				    // Do something with each Submission/Comment
-				    Comment currComment = new Comment(thing.getId(), thing.getBody());
+				    Comment currComment = new Comment(thing.getId(), s.getId(), thing.getBody());
+				    String url = s.getUrl() + thing.getId();
+				    currComment.setUrl(url);
 				    currComment.addTags(tags);
 				    currComment.addTags(currPost.getTags());
 				    if (currComment.getText()!=null) {

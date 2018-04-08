@@ -64,8 +64,10 @@ public class DatabaseManager {
 		DBObject obj = BasicDBObjectBuilder
 				.start("id", p.getId())
 				.add("title", p.getTitle())
+				.add("url", p.getURL())
 				.add("content", p.getText())
 				.add("tags", p.getTags())
+				.add("type", "post")
 				.get();
 
 		col.save(obj);
@@ -76,8 +78,11 @@ public class DatabaseManager {
 		switchCollection(POST_COL);
 		DBObject obj = BasicDBObjectBuilder
 				.start("id", c.getId())
+				.add("postId", c.getPostId())
+				.add("url",c.getUrl())
 				.add("content", c.getText())
 				.add("tags", c.getTags())
+				.add("type", "comment")
 				.get();
 
 		col.save(obj);
