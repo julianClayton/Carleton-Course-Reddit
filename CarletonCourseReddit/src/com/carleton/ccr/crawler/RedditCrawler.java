@@ -54,9 +54,12 @@ public class RedditCrawler {
 			
 		ArrayList<Post> allPosts = new ArrayList<Post>();
 		ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();
+		Parser parser = Parser.getInstance();
 		for (Listing<Submission>  page: firstThreePages) {
 			for (Submission s : page){
 				Post currPost = new Post(s.getId(), s.getTitle(), s.getSelfText());
+				currPost.addTags(parser.parsePost(currPost.getTitle()));
+				currPost.addTags(parser.parsePost(currPost.getText()));
 				db.addPostToDb(currPost);
 				allPosts.add(currPost);
 				SubmissionReference subRef = reddit.submission(s.getId());
@@ -69,7 +72,6 @@ public class RedditCrawler {
 				while (it.hasNext()) {
 				    // A PublicContribution is either a Submission or a Comment.
 				    PublicContribution<?> thing = it.next().getSubject();
-				    Parser parser = Parser.getInstance();
 				    // Do something with each Submission/Comment
 				    Comment currComment = new Comment(thing.getId(), thing.getBody());
 				    currComment.addTags(tags);

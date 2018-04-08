@@ -32,7 +32,7 @@ public class Parser {
 	
 
 	public ArrayList<String> parsePost(String post) {
-		post = post.replaceAll("[,.;]", " ");
+		post = post.replaceAll("[,.;:/]", " ");
 		String[] words = post.split("\\s+");
 		ArrayList<String> coursesInText = new ArrayList<String>();
 		for (int i = 0; i< words.length ; i++) {
@@ -78,7 +78,16 @@ public class Parser {
 				course = course.substring(0, 4);
 			}
 		}
-		return course.toUpperCase();
+		if (course.length() > 4) {
+			if (course.charAt(4) != '-') {
+				return null;
+			}
+		}
+		course = course.toUpperCase();
+		return removeHyphen(course);
+	}
+	private String removeHyphen(String course) {
+		return course.replaceAll("[\\s\\-()]", "");
 	}
 	public static void main(String[] args) {
 		Parser p = Parser.getInstance();

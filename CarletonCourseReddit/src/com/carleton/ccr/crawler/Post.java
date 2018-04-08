@@ -1,21 +1,23 @@
 package com.carleton.ccr.crawler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
 	String id;
 	String title;
 	String text;
-	List<String> tags;
+	ArrayList<String> tags;
 	List<Comment> comments;
 	
 	public Post(String id, String title, String text){
 		this.id = id;
 		this.title = title;
 		this.text = text;
+		tags = new ArrayList<String>();
 	}
 	
-	public Post(String text, List<String> tags){
+	public Post(String text, ArrayList<String> tags){
 		this.text = text;
 		this.tags = tags;
 	}
@@ -39,5 +41,12 @@ public class Post {
 	public String toString(){
 		return "ID: " + id + " Title: " + title + " Text: " + text + "\n";
 		
+	}
+	public void addTags(ArrayList<String> newTags) {
+		for (String tag : newTags) {
+			if (!tags.contains(tag) && tag != null) {
+				tags.add(tag);
+			}
+		}
 	}
 }

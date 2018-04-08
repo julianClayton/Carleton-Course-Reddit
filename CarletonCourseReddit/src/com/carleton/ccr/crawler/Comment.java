@@ -45,7 +45,7 @@ public class Comment {
 	}
 	public void addTags(ArrayList<String> moreTags) {
 		for (String tag : moreTags) {
-			if (!tags.contains(tag)) {
+			if (!tags.contains(tag) && tag != null) {
 				tags.add(tag);
 			}
 		}
