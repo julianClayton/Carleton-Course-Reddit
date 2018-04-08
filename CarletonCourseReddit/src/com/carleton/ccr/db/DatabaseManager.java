@@ -1,5 +1,6 @@
 package com.carleton.ccr.db;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import com.carleton.ccr.crawler.Comment;
 import com.carleton.ccr.crawler.Post;
@@ -11,13 +12,16 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
+import edu.carleton.comp4601.dao.Document;
+
 
 public class DatabaseManager {
 	
 	private final String DOC_NUM_COL = "docnum";
 	private final String POST_COL = "posts";
 	private final String COMMENT_COL = "comments";
-
+	private final String COURSE_CATEGORIES = "course-categories";
+	
 	private MongoClient	m;
 	private DBCollection col;
 	private DB db;
@@ -78,7 +82,44 @@ public class DatabaseManager {
 
 		col.save(obj);
 	}
+	public void addCoursesCategoriesToDatabase(ArrayList<String> courses) {
+		switchCollection(COURSE_CATEGORIES);
+		
+		for (String course : courses) {
+			DBObject obg = BasicDBObjectBuilder
+					.start("course", course)
+					.get();
+			col.save(obg);
+		}
+	}
+	public ArrayList<String> loadCourseCategoriesFromDatabase() {
+		switchCollection(COURSE_CATEGORIES);
+		ArrayList<String> courseCategories = new ArrayList<String>();
+		DBCursor cursor = col.find();
+		DBObject obj = null;
+		while(cursor.hasNext()) {
+			obj = cursor.next();
+			courseCategories.add((String) obj.get("course"));
+		}
+		return courseCategories;
+	}
+	public ArrayList<String> loadCoursesByCategory(String category) {
+		switchCollection(POST_COL);
+		DBCursor cursor = col.find();
+		DBObject obj = null;
+		ArrayList<String> courses = new ArrayList<String>();
 	
+		while (cursor.hasNext()) {
+			obj = cursor.next();
+			ArrayList<String> tags = (ArrayList<String>) obj.get("tags");
+			for (String tag : tags) {
+				if (tag.substring(0, 4).toLowerCase().equals(category.toLowerCase()) && !courses.contains(tag)) {
+					courses.add(tag);
+				}
+			}
+		}
+		return courses;
+	}
 	public static DatabaseManager getInstance() {
 		if (instance == null)
 			instance = new DatabaseManager();

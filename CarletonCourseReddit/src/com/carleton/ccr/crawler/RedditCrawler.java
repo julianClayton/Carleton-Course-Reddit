@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.carleton.ccr.db.DatabaseManager;
-import com.carleton.ccr.parsing.Parser;
+import com.carleton.ccr.parsing.CourseParser;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.NetworkAdapter;
@@ -54,7 +54,7 @@ public class RedditCrawler {
 			
 		ArrayList<Post> allPosts = new ArrayList<Post>();
 		ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();
-		Parser parser = Parser.getInstance();
+		CourseParser parser = CourseParser.getInstance();
 		for (Listing<Submission>  page: firstThreePages) {
 			for (Submission s : page){
 				Post currPost = new Post(s.getId(), s.getTitle(), s.getSelfText());
@@ -68,13 +68,14 @@ public class RedditCrawler {
 				// walkTree() returns a Kotlin Sequence. Since we're using Java, we're going to have to
 				// turn it into an Iterator to get any use out of it.
 				Iterator<CommentNode<PublicContribution<?>>> it = root.walkTree().iterator();
-				ArrayList<String> tags = Parser.getInstance().parsePost(currPost.getText());
+				ArrayList<String> tags = CourseParser.getInstance().parsePost(currPost.getText());
 				while (it.hasNext()) {
 				    // A PublicContribution is either a Submission or a Comment.
 				    PublicContribution<?> thing = it.next().getSubject();
 				    // Do something with each Submission/Comment
 				    Comment currComment = new Comment(thing.getId(), thing.getBody());
 				    currComment.addTags(tags);
+				    currComment.addTags(currPost.getTags());
 				    if (currComment.getText()!=null) {
 					    ArrayList<String> newTags = parser.parsePost(currComment.getText());
 				    	currComment.addTags(newTags);

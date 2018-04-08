@@ -34,7 +34,7 @@ public class Post {
 		return title;
 	}
 	
-	public List<String> getTags(){
+	public ArrayList<String> getTags(){
 		return tags;
 	}
 	

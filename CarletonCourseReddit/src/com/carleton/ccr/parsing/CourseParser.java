@@ -7,29 +7,35 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.carleton.ccr.db.DatabaseManager;
+
 /*
  * 
  * Class looks through comments 
  * 
  */
-public class Parser {
+public class CourseParser {
 	
 	
 	private static String COURSES_FILE = "courses/courses.txt";
 	ArrayList<String> courses;
-	private static Parser instance;
+	private static CourseParser instance;
 	
 	
-	public Parser() {
-		courses = loadFromFile();
+	public CourseParser() {
+		courses = loadCourses();
 	}
-	public static Parser getInstance() {
+	public static CourseParser getInstance() {
 		if (instance == null) {
-			instance = new Parser();
+			instance = new CourseParser();
 		}
 		return instance;
 	}
 	
+	private static void addCoursesToDB() {
+		ArrayList<String> courses = getInstance().loadCourses();
+		DatabaseManager.getInstance().addCoursesCategoriesToDatabase(courses);
+	}
 
 	public ArrayList<String> parsePost(String post) {
 		post = post.replaceAll("[,.;:/]", " ");
@@ -54,7 +60,7 @@ public class Parser {
 		return coursesInText;
 	}
 	
-	private ArrayList<String> loadFromFile() {
+	public ArrayList<String> loadCourses() {
 		Scanner s;
 		ArrayList<String>  list = new ArrayList<String>();
 		try {
@@ -89,11 +95,18 @@ public class Parser {
 	private String removeHyphen(String course) {
 		return course.replaceAll("[\\s\\-()]", "");
 	}
-	public static void main(String[] args) {
-		Parser p = Parser.getInstance();
-		//ArrayList<String> c = p.parsePost("Hey guys. There's some cool looking courses in the SYSC deparment but it looks like they're restricted to SYSC students. Is is possible for somene outside the program to take them? The COMP offerings are pretty dismal for low-level programming and hardware applications.Alternatively if anyone knows any good courses along that route in the COMP department I'm all ears");
-		ArrayList<String> c = p.parsePost("Courses are: Psyc 1001 and adsa  Busi 1002, both are online courses. Is it gonna be easy? Will I have time to breathe/rest?");
-
+	public ArrayList<String> getCourses() {
+		return courses;
 	}
+	public static void main(String[] args) {
+		//CourseParser p = CourseParser.getInstance();
+		//ArrayList<String> c = p.parsePost("Hey guys. There's some cool looking courses in the SYSC deparment but it looks like they're restricted to SYSC students. Is is possible for somene outside the program to take them? The COMP offerings are pretty dismal for low-level programming and hardware applications.Alternatively if anyone knows any good courses along that route in the COMP department I'm all ears");
+		//ArrayList<String> c = p.parsePost("Courses are: Psyc 1001 and adsa  Busi 1002, both are online courses. Is it gonna be easy? Will I have time to breathe/rest?");
+		//for(String course : c) {
+			//System.out.println(course);
+		//}
+		//CourseParser.getInstance().addCoursesToDB();
+	}
+	
 
 }

@@ -32,13 +32,11 @@ import com.mongodb.DBObject;
 
 public class MyLucene {
 
-	private static final String INDEX_DIR =  "/Users/lauramcdougall/Documents/Carleton/COMP4601/RedditProj/Lucene";
+	private static final String INDEX_DIR =  "/Users/julianclayton/Documents/workspace/COMP-4601-final-project/CarletonCourseReddit/Lucene";
 	private static FSDirectory dir;
 	private static IndexWriter	writer;
 	
-	private static final String URL = "url";
 	private static final String DOC_ID = "docId";
-	private static final String DATE = "date";
 	private static final String CONTENT = "content";
 	private static final String TAGS = "tags";
 	
@@ -145,11 +143,8 @@ public class MyLucene {
 	}
 	
 	public static void main (String[] args){
-		//MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
+		MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
 		ArrayList<Comment> results = MyLucene.query("comp");
-		for (Comment s : results){
-			System.out.println(s);
-		}
 	}
 	
 	
