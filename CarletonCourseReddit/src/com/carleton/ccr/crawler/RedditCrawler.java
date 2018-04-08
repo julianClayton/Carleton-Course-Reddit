@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.carleton.ccr.db.DatabaseManager;
-import com.carleton.ccr.parsing.Parser;
+import com.carleton.ccr.parsing.CourseParser;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.NetworkAdapter;
@@ -56,14 +56,12 @@ public class RedditCrawler {
 		List<Listing<Submission>> topAllTime = paginator.accumulate(3);
 	
 		
-		
 		DefaultPaginator<Submission> paginator2 = reddit
 			    .subreddit("CarletonU")
 			    .posts()
 			    .limit(50)
 			    .sorting(SubredditSort.NEW)
 			    .build();
-
 		
 		List<Listing<Submission>> newPosts = paginator2.accumulate(2);
 		
@@ -78,9 +76,8 @@ public class RedditCrawler {
 		
 		topAllTime.addAll(newPosts);
 		topAllTime.addAll(hotPosts);
-			
-		ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();
-		Parser parser = Parser.getInstance();
+		
+		CourseParser parser = CourseParser.getInstance();
 		for (Listing<Submission>  page: topAllTime) {
 			for (Submission s : page){
 				if (db.getDocument(s.getId()) == true){
@@ -98,7 +95,7 @@ public class RedditCrawler {
 				// walkTree() returns a Kotlin Sequence. Since we're using Java, we're going to have to
 				// turn it into an Iterator to get any use out of it.
 				Iterator<CommentNode<PublicContribution<?>>> it = root.walkTree().iterator();
-				ArrayList<String> tags = Parser.getInstance().parsePost(currPost.getText());
+				ArrayList<String> tags = CourseParser.getInstance().parsePost(currPost.getText());
 				while (it.hasNext()) {
 				    // A PublicContribution is either a Submission or a Comment.
 				    PublicContribution<?> thing = it.next().getSubject();
@@ -107,12 +104,12 @@ public class RedditCrawler {
 				    String url = s.getUrl() + thing.getId();
 				    currComment.setUrl(url);
 				    currComment.addTags(tags);
+				    currComment.addTags(currPost.getTags());
 				    if (currComment.getText()!=null) {
 					    ArrayList<String> newTags = parser.parsePost(currComment.getText());
 				    	currComment.addTags(newTags);
 				    }
 				    db.addCommentToDb(currComment);
-				    allComments.add(currComment);
 				}
 			}
 		}

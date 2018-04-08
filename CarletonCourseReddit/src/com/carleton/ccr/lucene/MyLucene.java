@@ -25,23 +25,24 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import com.carleton.ccr.crawler.Comment;
+import com.carleton.ccr.db.DatabaseManager;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
 
 public class MyLucene {
 
-	private static final String INDEX_DIR =  "/Users/lauramcdougall/Documents/Carleton/COMP4601/RedditProj/Lucene";
+	private static final String INDEX_DIR =  "/Users/julianclayton/Documents/workspace/COMP-4601-final-project/CarletonCourseReddit/Lucene";
 	private static FSDirectory dir;
 	private static IndexWriter	writer;
 	
-	private static final String URL = "url";
 	private static final String DOC_ID = "docId";
 	private static final String TITLE = "title";
 	private static final String TYPE = "type";
 	private static final String CONTENT = "content";
 	private static final String TAGS = "tags";
-	
+	private static final String URL = "url";
+
 
 	public static void indexLucene(DBCursor cursor){
 
@@ -156,11 +157,8 @@ public class MyLucene {
 	}
 	
 	public static void main (String[] args){
-		//MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
+		MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
 		ArrayList<Comment> results = MyLucene.query("comp");
-		for (Comment s : results){
-			System.out.println(s);
-		}
 	}
 	
 	

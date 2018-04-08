@@ -51,7 +51,7 @@ public class Comment {
 		return text;
 	}
 	
-	public List<String> getTags(){
+	public ArrayList<String> getTags(){
 		return tags;
 	}
 	
