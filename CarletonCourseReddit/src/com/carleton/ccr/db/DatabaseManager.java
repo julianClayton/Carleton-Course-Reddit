@@ -39,6 +39,20 @@ public class DatabaseManager {
 		return num;
 	}
 	
+	public boolean getDocument(String id) {
+		switchCollection(POST_COL);
+		DBCursor cur = col.find(new BasicDBObject("id", id));
+		DBObject obj = null;
+		if (cur.hasNext()) {
+			obj = cur.next();
+		}
+		if (obj == null) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public void incrementDocNum() {
 		switchCollection(DOC_NUM_COL);
 		DBCursor cur = col.find().limit(1);
@@ -74,7 +88,6 @@ public class DatabaseManager {
 		switchCollection(POST_COL);
 		DBObject obj = BasicDBObjectBuilder
 				.start("id", c.getId())
-				.add("postId", c.getPostId())
 				.add("url",c.getUrl())
 				.add("content", c.getText())
 				.add("tags", c.getTags())

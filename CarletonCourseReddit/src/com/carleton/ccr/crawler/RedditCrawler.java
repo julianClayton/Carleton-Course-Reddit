@@ -14,17 +14,19 @@ import net.dean.jraw.http.UserAgent;
 import net.dean.jraw.models.Listing;
 import net.dean.jraw.models.PublicContribution;
 import net.dean.jraw.models.Submission;
+import net.dean.jraw.models.Subreddit;
+import net.dean.jraw.models.SubredditSort;
+import net.dean.jraw.models.TimePeriod;
 import net.dean.jraw.oauth.Credentials;
 import net.dean.jraw.oauth.OAuthHelper;
+import net.dean.jraw.pagination.BarebonesPaginator;
 import net.dean.jraw.pagination.DefaultPaginator;
+import net.dean.jraw.pagination.Paginator;
 import net.dean.jraw.references.SubmissionReference;
 import net.dean.jraw.tree.CommentNode;
 import net.dean.jraw.tree.RootCommentNode;
 
 public class RedditCrawler {
-	private ArrayList<Post> allPosts = new ArrayList<Post>();
-	private ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();
-	
 	
 	public static void main (String[] args){
 		runParser();
@@ -47,16 +49,44 @@ public class RedditCrawler {
 		DefaultPaginator<Submission> paginator = reddit
 			    .subreddit("CarletonU")
 			    .posts()
+			    .limit(50)
+			    .sorting(SubredditSort.TOP)
+			    .build();
+		
+		List<Listing<Submission>> topAllTime = paginator.accumulate(3);
+	
+		
+		
+		DefaultPaginator<Submission> paginator2 = reddit
+			    .subreddit("CarletonU")
+			    .posts()
+			    .limit(50)
+			    .sorting(SubredditSort.NEW)
 			    .build();
 
-			// Get a maximum of three pages. Doesn't guarantee that there are three Listings here.
-			List<Listing<Submission>> firstThreePages = paginator.accumulate(10);
+		
+		List<Listing<Submission>> newPosts = paginator2.accumulate(2);
+		
+		DefaultPaginator<Submission> paginator3 = reddit
+			    .subreddit("CarletonU")
+			    .posts()
+			    .limit(50)
+			    .sorting(SubredditSort.HOT)
+			    .build();
+		
+		List<Listing<Submission>> hotPosts = paginator3.accumulate(2);
+		
+		topAllTime.addAll(newPosts);
+		topAllTime.addAll(hotPosts);
 			
-		ArrayList<Post> allPosts = new ArrayList<Post>();
 		ArrayList<com.carleton.ccr.crawler.Comment> allComments = new ArrayList<com.carleton.ccr.crawler.Comment>();
 		Parser parser = Parser.getInstance();
-		for (Listing<Submission>  page: firstThreePages) {
+		for (Listing<Submission>  page: topAllTime) {
 			for (Submission s : page){
+				if (db.getDocument(s.getId()) == true){
+					continue;
+				}
+				
 				Post currPost = new Post(s.getId(), s.getUrl(), s.getTitle(), s.getSelfText());
 				currPost.addTags(parser.parsePost(currPost.getTitle()));
 				currPost.addTags(parser.parsePost(currPost.getText()));
