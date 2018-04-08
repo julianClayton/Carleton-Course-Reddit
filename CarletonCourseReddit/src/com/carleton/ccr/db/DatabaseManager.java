@@ -103,4 +103,11 @@ public class DatabaseManager {
 		col = db.getCollection(collection);
 	}
 
+	
+	public DBCursor getAllDocCursor(){
+		switchCollection(POST_COL);
+		DBCursor cursor = col.find();	
+		return cursor;
+	}
+
 }
