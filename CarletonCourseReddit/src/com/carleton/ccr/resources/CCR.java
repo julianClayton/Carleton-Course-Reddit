@@ -15,9 +15,9 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import com.carleton.ccr.crawler.Comment;
+import com.carleton.ccr.crawler.Submission;
 import com.carleton.ccr.db.DatabaseManager;
 import com.carleton.ccr.lucene.MyLucene;
-
 
 @Path("/ccr")
 public class CCR {
@@ -59,7 +59,7 @@ public class CCR {
 		htmlBuilder.append("<head><title> Courses for: " + category);
 		htmlBuilder.append("</title></head>");
 		for (String course : courses) {
-			htmlBuilder.append("<li><a href=\"" + "/CarletonCourseReddit/rest/ccr/courses/search/" + course + "\">"+course +"</a></li>");
+			htmlBuilder.append("<li><a href=\"" + "/CarletonCourseReddit/rest/ccr/courses/search/" + course + "\">"+ course +"</a></li>");
 		}
 		htmlBuilder.append("<ul>");
 		return htmlBuilder.toString();
@@ -70,13 +70,13 @@ public class CCR {
 	@Produces(MediaType.TEXT_HTML) 
 	public String queryCourses(@PathParam("COURSE_QUERY") String query) {
 		StringBuilder htmlBuilder = new StringBuilder();
-		ArrayList<Comment> comments = new ArrayList<Comment>();
+		ArrayList<Submission> comments = new ArrayList<Submission>();
 		ArrayList<String> courselist = new ArrayList<String>(Arrays.asList(query.split("[+]")));
 		htmlBuilder.append("<html>");
 		htmlBuilder.append("<head><title> Overview of: ");
 		
 		for (String aCourse : courselist) {
-			ArrayList<Comment> aquery = MyLucene.query(aCourse);
+			ArrayList<Submission> aquery = MyLucene.query(aCourse);
 			if (aquery != null) {
 				comments.addAll(MyLucene.query(aCourse));
 			}
@@ -88,7 +88,7 @@ public class CCR {
 		htmlBuilder.append("</title></head>");
 		htmlBuilder.append("<body>");
 		htmlBuilder.append("<ul>");	
-		for (Comment comment : comments) {
+		for (Submission comment : comments) {
 			System.out.println(comment.getText());
 			htmlBuilder.append("<li>" + comment.getText() + " " + "<a href=\""+ comment.getUrl() + "\">" + "POST</a>" + "</li>");
 		}

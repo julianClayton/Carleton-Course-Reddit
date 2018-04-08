@@ -105,7 +105,7 @@ public class CourseParser {
 		//for(String course : c) {
 			//System.out.println(course);
 		//}
-		//CourseParser.getInstance().addCoursesToDB();
+		CourseParser.getInstance().addCoursesToDB();
 	}
 	
 

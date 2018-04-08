@@ -25,6 +25,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
 import com.carleton.ccr.crawler.Comment;
+import com.carleton.ccr.crawler.Post;
+import com.carleton.ccr.crawler.Submission;
 import com.carleton.ccr.db.DatabaseManager;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -32,7 +34,7 @@ import com.mongodb.DBObject;
 
 public class MyLucene {
 
-	private static final String INDEX_DIR =  "/Users/julianclayton/Documents/workspace/COMP-4601-final-project/CarletonCourseReddit/Lucene";
+	private static final String INDEX_DIR =  "/Users/lauramcdougall/Documents/Carleton/COMP4601/RedditProj/Lucene";
 	private static FSDirectory dir;
 	private static IndexWriter	writer;
 	
@@ -103,7 +105,7 @@ public class MyLucene {
 			
 			if (type.equals("post")){
 				lucDoc.add(new	StringField(TITLE, title, Field.Store.YES));
-				}
+			}
 			
 			writer.addDocument(lucDoc);
 			
@@ -113,7 +115,7 @@ public class MyLucene {
 		}
 	}	
 
-	public	static ArrayList<Comment> query(String searchStr)	{	
+	public	static ArrayList<Submission> query(String searchStr)	{	
 		try	{	
 		    IndexReader reader = DirectoryReader.open(FSDirectory.open(new File(INDEX_DIR)));
 			IndexSearcher searcher = new IndexSearcher(reader);
@@ -124,7 +126,7 @@ public class MyLucene {
 		 	
 		 	ScoreDoc[]	hits =	results.scoreDocs;
 		 	
-		 	ArrayList<Comment> courseComments = new ArrayList<Comment>();	
+		 	ArrayList<Submission> courseComments = new ArrayList<Submission>();	
 			
 		 	
 		 	for	(ScoreDoc hit :	hits)	{	
@@ -138,14 +140,13 @@ public class MyLucene {
 			 		
 			 		String type = indexDoc.get(TYPE);
 			 		
-				 	Comment com = new Comment( indexDoc.get(DOC_ID), indexDoc.get(URL), indexDoc.get(CONTENT) );
-				 	com.setTags(tags);
-				 	
-				 	if (type.equals("post")){
-				 		com.setTitle(indexDoc.get(TITLE));
+			 		if (type.equals("post")){
+			 			Post post = new Post( indexDoc.get(DOC_ID), indexDoc.get(URL), indexDoc.get(CONTENT), tags, indexDoc.get(TITLE) );
+			 			courseComments.add(post);
+				 	} else {
+				 		Comment com = new Comment( indexDoc.get(DOC_ID), indexDoc.get(URL), indexDoc.get(CONTENT), tags );
+				 		courseComments.add(com);
 				 	}
-				 	
-				 	courseComments.add(com);
 				 } 		
 		 	}
 		 	reader.close();
@@ -157,8 +158,12 @@ public class MyLucene {
 	}
 	
 	public static void main (String[] args){
-		MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
-		ArrayList<Comment> results = MyLucene.query("comp");
+		//MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
+		ArrayList<Submission> results = MyLucene.query("comp");
+		
+		for (Submission r : results){
+			System.out.println(r);
+		}
 	}
 	
 	

@@ -1,57 +1,29 @@
 package com.carleton.ccr.crawler;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Post {
-	String id;
-	String url;
+public class Post extends Submission{
 	String title;
-	String text;
-	ArrayList<String> tags;
-	List<Comment> comments;
 	
-	public Post(String id, String url, String title, String text){
-		this.id = id;
-		this.url = url;
+	public Post(String id, String url, String text, String title) {
+		super(id, url, text);
 		this.title = title;
-		this.text = text;
-		tags = new ArrayList<String>();
 	}
 	
-	public Post(String text, ArrayList<String> tags){
-		this.text = text;
-		this.tags = tags;
-	}
-	
-	public String getId(){
-		return id;
-	}
-	
-	public String getText(){
-		return text;
+	public Post(String id, String url, String text, ArrayList<String> tags, String title) {
+		super(id, url, text, tags);
+		this.title = title;
 	}
 	
 	public String getTitle(){
 		return title;
 	}
 	
-	public ArrayList<String> getTags(){
-		return tags;
-	}
-	public String getURL(){
-		return url;
-	}
-	
+	@Override
 	public String toString(){
-		return "ID: " + id + " Title: " + title + " Text: " + text + "\n";
+		return"\n------------------------------\nID: " + id + "  URL : " + url 
+				 + "\nTitle : " + title + "\nText: " + text + "";
 		
 	}
-	public void addTags(ArrayList<String> newTags) {
-		for (String tag : newTags) {
-			if (!tags.contains(tag) && tag != null) {
-				tags.add(tag);
-			}
-		}
-	}
+	
 }

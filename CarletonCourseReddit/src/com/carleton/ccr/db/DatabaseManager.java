@@ -78,7 +78,7 @@ public class DatabaseManager {
 		DBObject obj = BasicDBObjectBuilder
 				.start("id", p.getId())
 				.add("title", p.getTitle())
-				.add("url", p.getURL())
+				.add("url", p.getUrl())
 				.add("content", p.getText())
 				.add("tags", p.getTags())
 				.add("type", "post")
