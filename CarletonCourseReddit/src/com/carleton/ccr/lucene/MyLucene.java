@@ -86,9 +86,6 @@ public class MyLucene {
 			Document lucDoc	=	new	Document();	
 
 			String docId = object.get("id").toString();
-			String text = (String)object.get("content");
-			String url = (String)object.get("url");
-			String title = (String)object.get("title");
 			String type = (String)object.get("type");
 			ArrayList<String> tags = (ArrayList<String>) object.get("tags");
 			
@@ -98,14 +95,8 @@ public class MyLucene {
 			}
 		
 			lucDoc.add(new	StringField(DOC_ID, docId, Field.Store.YES));
-			lucDoc.add(new	StringField(URL, url, Field.Store.YES));
-			lucDoc.add(new StringField(CONTENT, text, Field.Store.YES));
 			lucDoc.add(new	StringField(TYPE, type, Field.Store.YES));
 			lucDoc.add(new TextField(TAGS, tagsString, Field.Store.YES));
-			
-			if (type.equals("post")){
-				lucDoc.add(new	StringField(TITLE, title, Field.Store.YES));
-			}
 			
 			writer.addDocument(lucDoc);
 			
@@ -134,17 +125,13 @@ public class MyLucene {
 			 	String id = indexDoc.get(DOC_ID);
 			 	
 			 	if	(id	!=	null) {	
-			 		String tagString = indexDoc.get(TAGS);
-			 		String[] tagsArr = tagString.split(" ");
-			 		ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
-			 		
 			 		String type = indexDoc.get(TYPE);
 			 		
 			 		if (type.equals("post")){
-			 			Post post = new Post( indexDoc.get(DOC_ID), indexDoc.get(URL), indexDoc.get(CONTENT), tags, indexDoc.get(TITLE) );
+			 			Post post = DatabaseManager.getInstance().getPost(id);
 			 			courseComments.add(post);
 				 	} else {
-				 		Comment com = new Comment( indexDoc.get(DOC_ID), indexDoc.get(URL), indexDoc.get(CONTENT), tags );
+				 		Comment com = DatabaseManager.getInstance().getComment(id);
 				 		courseComments.add(com);
 				 	}
 				 } 		
@@ -158,11 +145,11 @@ public class MyLucene {
 	}
 	
 	public static void main (String[] args){
-		//MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
+		MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
 		ArrayList<Submission> results = MyLucene.query("comp");
 		
 		for (Submission r : results){
-			System.out.println(r);
+			//System.out.println(r);
 		}
 	}
 	

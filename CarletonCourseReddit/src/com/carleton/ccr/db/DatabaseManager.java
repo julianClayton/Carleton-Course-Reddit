@@ -1,6 +1,7 @@
 package com.carleton.ccr.db;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.carleton.ccr.crawler.Comment;
 import com.carleton.ccr.crawler.Post;
@@ -81,6 +82,7 @@ public class DatabaseManager {
 				.add("url", p.getUrl())
 				.add("content", p.getText())
 				.add("tags", p.getTags())
+				.add("sentiment", p.getSent())
 				.add("type", "post")
 				.get();
 
@@ -95,11 +97,48 @@ public class DatabaseManager {
 				.add("url",c.getUrl())
 				.add("content", c.getText())
 				.add("tags", c.getTags())
+				.add("sentiment", c.getSent())
 				.add("type", "comment")
 				.get();
 
 		col.save(obj);
 	}
+	
+	public Comment getComment(String id) {
+		switchCollection(POST_COL);
+		DBCursor cur = col.find(new BasicDBObject("id", id));
+		DBObject obj = null;
+		if (cur.hasNext()) {
+			obj = cur.next();
+		}
+		if (obj == null) {
+			return null;
+		}
+		//String tagString = (String) obj.get("tags");
+ 		//String[] tagsArr = tagString.split(" ");
+ 		//ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
+		Comment com = new Comment((String) obj.get("id"), (String) obj.get("url"), (String) obj.get("content"), (ArrayList<String>) obj.get("tags"));
+		return com;
+	}
+	
+	public Post getPost(String id) {
+		switchCollection(POST_COL);
+		DBCursor cur = col.find(new BasicDBObject("id", id));
+		DBObject obj = null;
+		if (cur.hasNext()) {
+			obj = cur.next();
+		}
+		if (obj == null) {
+			return null;
+		}
+		//ArrayList<String> tagString = (ArrayList<String>) obj.get("tags");
+ 		//String[] tagsArr = tagString.split(" ");
+ 		//ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
+		Post post = new Post((String) obj.get("id"), (String) obj.get("url"), (String) obj.get("content"), 
+				(ArrayList<String>) obj.get("tags"), (String) obj.get("title"));
+		return post;
+	}
+	
 	public void addCoursesCategoriesToDatabase(ArrayList<String> courses) {
 		switchCollection(COURSE_CATEGORIES);
 		

@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.carleton.ccr.db.DatabaseManager;
 import com.carleton.ccr.parsing.CourseParser;
+import com.carleton.sentiment.SentimentAnalyzer;
 
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.NetworkAdapter;
@@ -74,17 +75,24 @@ public class RedditCrawler {
 		topAllTime.addAll(hotPosts);
 		
 		CourseParser parser = CourseParser.getInstance();
+		SentimentAnalyzer sa = SentimentAnalyzer.getInstance();
 		for (Listing<Submission>  page: topAllTime) {
 			for (Submission s : page){
 				if (db.getDocument(s.getId()) == true){
 					continue;
 				}
 				
-				Post currPost = new Post(s.getId(), s.getUrl(), s.getTitle(), s.getSelfText());
+				Post currPost = new Post(s.getId(), s.getUrl(), s.getSelfText(), s.getTitle());
 				currPost.addTags(parser.parsePost(currPost.getTitle()));
 				currPost.addTags(parser.parsePost(currPost.getText()));
-				db.addPostToDb(currPost);
-				//allPosts.add(currPost);
+				
+				String allText = s.getTitle() + " " + s.getSelfText();
+				
+				String sentiment= sa.getSentimentFromPost(allText);
+			    currPost.setSentiment(sentiment);
+				
+			    db.addPostToDb(currPost);
+			    
 				SubmissionReference subRef = reddit.submission(s.getId());
 				RootCommentNode root = subRef.comments();
 
@@ -99,12 +107,18 @@ public class RedditCrawler {
 				    Comment currComment = new Comment(thing.getId(), s.getId(), thing.getBody());
 				    String url = s.getUrl() + thing.getId();
 				    currComment.setUrl(url);
+				    
 				    currComment.addTags(tags);
 				    currComment.addTags(currPost.getTags());
+				    
 				    if (currComment.getText()!=null) {
 					    ArrayList<String> newTags = parser.parsePost(currComment.getText());
 				    	currComment.addTags(newTags);
+				    	
+				    	String comSent = sa.getSentimentFromPost(currComment.getText());
+				    	currComment.setSentiment(comSent);
 				    }
+				    
 				    db.addCommentToDb(currComment);
 				}
 			}

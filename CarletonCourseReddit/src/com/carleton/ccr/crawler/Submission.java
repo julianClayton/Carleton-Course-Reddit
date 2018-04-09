@@ -7,6 +7,7 @@ public abstract class Submission {
 	String postId;
 	String url;
 	String text;
+	String sentiment;
 	ArrayList<String> tags;
 	
 	public Submission(String id, String url, String text){
@@ -43,12 +44,20 @@ public abstract class Submission {
 		return tags;
 	}
 	
+	public String getSent(){
+		return sentiment;
+	}
+	
 	public void setTags(ArrayList<String> tags) {
 		this.tags = tags;
 	}
 	
 	public void setUrl(String url){
 		this.url = url;
+	}
+	
+	public void setSentiment(String sent){
+		this.sentiment = sent;
 	}
 	
 	public void addTags(ArrayList<String> moreTags) {
