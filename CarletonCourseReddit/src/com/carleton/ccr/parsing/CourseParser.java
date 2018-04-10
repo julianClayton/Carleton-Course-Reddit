@@ -85,7 +85,7 @@ public class CourseParser {
 			}
 		}
 		if (course.length() > 4) {
-			if (course.charAt(4) != '-') {
+			if (!Character.toString(course.charAt(3)).equals("-")) {
 				return null;
 			}
 		}
