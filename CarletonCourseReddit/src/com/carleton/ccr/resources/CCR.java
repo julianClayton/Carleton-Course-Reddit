@@ -18,6 +18,7 @@ import com.carleton.ccr.crawler.Comment;
 import com.carleton.ccr.crawler.Submission;
 import com.carleton.ccr.db.DatabaseManager;
 import com.carleton.ccr.lucene.MyLucene;
+import com.carleton.ccr.util.Tuple;
 
 @Path("/ccr")
 public class CCR {
@@ -52,14 +53,17 @@ public class CCR {
 	@GET
 	@Path("courses/categories/{CATEGORY}")
 	public String getCoursesByCategory(@PathParam("CATEGORY") String category) {
-		ArrayList<String> courses = DatabaseManager.getInstance().loadCoursesByCategory(category);
+		DatabaseManager dbm = DatabaseManager.getInstance();
+		Tuple<String, ArrayList<String>> coursesTuple = dbm.loadCoursesByCategory(category);
 
+		ArrayList<String> courses = coursesTuple.y;
+		String sentiment = coursesTuple.x;
 		StringBuilder htmlBuilder = new StringBuilder();
 		htmlBuilder.append("<html>");
 		htmlBuilder.append("<head><title> Courses for: " + category);
-		htmlBuilder.append("</title></head>");
+		htmlBuilder.append("</title>Courses for: " + category + ", overall opinion: " + sentiment +  "</head>");
 		for (String course : courses) {
-			htmlBuilder.append("<li><a href=\"" + "/CarletonCourseReddit/rest/ccr/courses/search/" + course + "\">"+ course +"</a></li>");
+			htmlBuilder.append("<li><a href=\"" + "/CarletonCourseReddit/rest/ccr/courses/search/" + course + "\">"+ course +"</a>" + ", opinion: " + dbm.getSentimentForCourse(course) +"</li>");
 		}
 		htmlBuilder.append("<ul>");
 		return htmlBuilder.toString();

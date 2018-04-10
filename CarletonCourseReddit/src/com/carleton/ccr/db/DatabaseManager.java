@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import com.carleton.ccr.crawler.Comment;
 import com.carleton.ccr.crawler.Post;
+import com.carleton.ccr.util.ListUtils;
+import com.carleton.ccr.util.Tuple;
 import com.mongodb.BasicDBObject;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DB;
@@ -160,22 +162,54 @@ public class DatabaseManager {
 		}
 		return courseCategories;
 	}
-	public ArrayList<String> loadCoursesByCategory(String category) {
+
+	public String getSentimentForCourse(String course) {
 		switchCollection(POST_COL);
 		DBCursor cursor = col.find();
 		DBObject obj = null;
 		ArrayList<String> courses = new ArrayList<String>();
-	
+		ArrayList<String> sentiments = new ArrayList<String>();
 		while (cursor.hasNext()) {
 			obj = cursor.next();
 			ArrayList<String> tags = (ArrayList<String>) obj.get("tags");
+			String sentiment = (String) obj.get("sentiment");
 			for (String tag : tags) {
-				if (tag.substring(0, 4).toLowerCase().equals(category.toLowerCase()) && !courses.contains(tag)) {
+				if (tag.toLowerCase().equals(course.toLowerCase()) && !courses.contains(tag)) {
 					courses.add(tag);
+					sentiments.add(sentiment);
+					
 				}
 			}
 		}
-		return courses;
+		String sentiment = null;
+		if (sentiments.size() > 0) {
+			sentiment = ListUtils.mostCommon(sentiments);
+		}
+		return sentiment;
+	}
+	public Tuple<String, ArrayList<String>> loadCoursesByCategory(String category) {
+		switchCollection(POST_COL);
+		DBCursor cursor = col.find();
+		DBObject obj = null;
+		ArrayList<String> courses = new ArrayList<String>();
+		ArrayList<String> sentiments = new ArrayList<String>();
+		while (cursor.hasNext()) {
+			obj = cursor.next();
+			ArrayList<String> tags = (ArrayList<String>) obj.get("tags");
+			String sentiment = (String) obj.get("sentiment");
+			for (String tag : tags) {
+				if (tag.substring(0, 4).toLowerCase().equals(category.toLowerCase()) && !courses.contains(tag)) {
+					courses.add(tag);
+					sentiments.add(sentiment);
+					
+				}
+			}
+		}
+		String sentiment = null;
+		if (sentiments.size() > 0) {
+			sentiment = ListUtils.mostCommon(sentiments);
+		}
+		return new Tuple<String, ArrayList<String>>(sentiment, courses);
 	}
 	public static DatabaseManager getInstance() {
 		if (instance == null)

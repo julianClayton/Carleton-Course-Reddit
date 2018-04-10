@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+import com.carleton.ccr.util.ListUtils;
+
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -32,20 +34,7 @@ public class SentimentAnalyzer {
         pipeline = new StanfordCoreNLP(props);
 
 	}
-	public static <T> T mostCommon(List<T> list) {
-	    Map<T, Integer> map = new HashMap<>();
 
-	    for (T t : list) {
-	        Integer val = map.get(t);
-	        map.put(t, val == null ? 1 : val + 1);
-	    }
-	    Entry<T, Integer> max = null;
-	    for (Entry<T, Integer> e : map.entrySet()) {
-	        if (max == null || e.getValue() > max.getValue())
-	            max = e;
-	    }
-	    return max.getKey();
-	}
 	public String getSentimentFromPost(String text) {
 		Annotation annotation = pipeline.process(text);
         List<CoreMap> sentences = (List) annotation.get(CoreAnnotations.SentencesAnnotation.class);
@@ -55,7 +44,7 @@ public class SentimentAnalyzer {
             sentiments.add(sentiment);
             System.out.println(sentiment + "\t" + sentence);
         }
-        return mostCommon(sentiments);
+        return ListUtils.mostCommon(sentiments);
 	}
 	public static void main(String[] args) {
 		SentimentAnalyzer sa = SentimentAnalyzer.getInstance();
