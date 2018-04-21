@@ -85,7 +85,7 @@ public class CourseParser {
 			}
 		}
 		if (course.length() > 4) {
-			if (!Character.toString(course.charAt(3)).equals("-")) {
+			if (course.charAt(4) != '-') {
 				return null;
 			}
 		}
@@ -105,7 +105,7 @@ public class CourseParser {
 		//for(String course : c) {
 			//System.out.println(course);
 		//}
-		CourseParser.getInstance().addCoursesToDB();
+		//CourseParser.getInstance().addCoursesToDB();
 	}
 	
 

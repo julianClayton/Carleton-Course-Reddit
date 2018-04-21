@@ -45,11 +45,12 @@ public class CCR {
 		ArrayList<String> courseCategories = DatabaseManager.getInstance().loadCourseCategoriesFromDatabase();
 		for (String course : courseCategories) {
 			
-			htmlBuilder.append("<li><a href=\"" + "courses/categories/" + course + "\">"+course +"</a></li>");
+			htmlBuilder.append("<li><a href=\"" + "ccr/courses/categories/" + course + "\">"+course +"</a></li>");
 		}
 		htmlBuilder.append("<ul>");
 		return htmlBuilder.toString();
 	}
+	
 	@GET
 	@Path("courses/categories/{CATEGORY}")
 	public String getCoursesByCategory(@PathParam("CATEGORY") String category) {
@@ -63,7 +64,7 @@ public class CCR {
 		htmlBuilder.append("<head><title> Courses for: " + category);
 		htmlBuilder.append("</title>Courses for: " + category + ", overall opinion: " + sentiment +  "</head>");
 		for (String course : courses) {
-			htmlBuilder.append("<li><a href=\"" + "/CarletonCourseReddit/rest/ccr/courses/search/" + course + "\">"+ course +"</a>" + ", opinion: " + dbm.getSentimentForCourse(course) +"</li>");
+			htmlBuilder.append("<li><a href=\"" + "/CarletonCourseReddit/ccr/courses/search/" + course + "\">"+ course +"</a>" + ", opinion: " + dbm.getSentimentForCourse(course) +"</li>");
 		}
 		htmlBuilder.append("<ul>");
 		return htmlBuilder.toString();
