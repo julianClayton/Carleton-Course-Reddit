@@ -34,7 +34,7 @@ import com.mongodb.DBObject;
 
 public class MyLucene {
 
-	private static final String INDEX_DIR =  "/Users/lauramcdougall/Documents/Carleton/COMP4601/RedditProj/Lucene";
+	private static final String INDEX_DIR =  "/Users/julianclayton/Documents/workspace/COMP-4601-final-project/CarletonCourseReddit/Lucene";
 	private static FSDirectory dir;
 	private static IndexWriter	writer;
 	
@@ -145,12 +145,12 @@ public class MyLucene {
 	}
 	
 	public static void main (String[] args){
-		MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
-		ArrayList<Submission> results = MyLucene.query("comp");
+		//MyLucene.indexLucene(DatabaseManager.getInstance().getAllDocCursor());
+		//ArrayList<Submission> results = MyLucene.query("comp");
 		
-		for (Submission r : results){
-			//System.out.println(r);
-		}
+		/*for (Submission r : results){
+			System.out.println(r);
+		}*/
 	}
 	
 	
