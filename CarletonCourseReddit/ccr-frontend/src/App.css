@@ -3,17 +3,18 @@
 }
 
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: #990000;
+  height: 200px;
   padding: 20px;
   color: white;
 }
-
+.sub-header{
+  padding: 20px;
+}
 .App-title {
   font-size: 1.5em;
 }
@@ -34,7 +35,20 @@
   background-color: rgb(220, 245, 243);
   cursor: pointer;
 }
-
+.topnode {
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  border-radius: 3px;
+  background-color: #FFF4A2;
+  font-weight: bold;
+}
+.topnode:hover {
+  background-color: #E68924;
+  cursor: pointer;
+}
 .info, .node {
   padding: 2px 10px 2px 5px;
   font: 14px Helvetica, Arial, sans-serif;
@@ -51,12 +65,39 @@
   -webkit-transition: all 0.1s;
   transition: all 0.1s;
 }
-
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #222;
+}
+.topdiv {
+  padding-top: 10px;
+}
+.mybutton {
+  right: 0;
+  top: 1;
+  position: absolute;
+  background-color: #F3A716; 
+  border: none;
+  color: white;
+  padding: 4px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+}
+.mybutton:hover {
+  cursor: pointer;
+  background-color: #F3D916;
+}
+.mybutton:focus {
+  outline: none;
+}
+.email-holder {
+  margin-left: 10px;
+}
 .tree-view_arrow-empty {
   color: yellow;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
