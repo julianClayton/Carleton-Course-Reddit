@@ -19,7 +19,15 @@ public class API {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<String> ccr() {
-		return  DatabaseManager.getInstance().loadCourseCategoriesFromDatabase();
+		DatabaseManager dbm = DatabaseManager.getInstance();
+		ArrayList<String> subjects = dbm.loadCourseCategoriesFromDatabase();
+		ArrayList<String> ret = new ArrayList<String>();
+		for (String subject : subjects) {
+			if (!dbm.loadCoursesByCategory(subject).y.isEmpty()) {
+				ret.add(subject);
+			}
+		}
+		return  ret;
 	}
 	@GET
 	@Path("courses/categories/{CATEGORY}")
