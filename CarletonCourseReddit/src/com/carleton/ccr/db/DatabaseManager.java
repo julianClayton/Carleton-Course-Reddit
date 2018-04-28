@@ -85,12 +85,18 @@ public class DatabaseManager {
 				.add("content", p.getText())
 				.add("tags", p.getTags())
 				.add("sentiment", p.getSent())
+				.add("postId", p.getPostId())
 				.add("type", "post")
+				.add("replies", p.getReplies())
 				.get();
 
 		col.save(obj);
 	}
-	
+	public void addReplyToPost(String id, Comment c) {
+		Post p = getPost(id);
+		p.addReply(c);
+		addPostToDb(p);
+	}
 	public void addCommentToDb(Comment c) {
 		incrementDocNum();
 		switchCollection(POST_COL);
@@ -100,6 +106,8 @@ public class DatabaseManager {
 				.add("content", c.getText())
 				.add("tags", c.getTags())
 				.add("sentiment", c.getSent())
+				.add("parentId", c.getParentId())
+				.add("postId", c.getPostId())
 				.add("type", "comment")
 				.get();
 
