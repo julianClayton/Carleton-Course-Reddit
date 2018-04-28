@@ -84,7 +84,6 @@ public class RedditCrawler {
 				if (db.getDocument(s.getId()) == true){
 					continue;
 				}
-				
 				Post currPost = new Post(s.getId(), s.getUrl(), s.getSelfText(), s.getTitle());
 				currPost.addTags(parser.parsePost(currPost.getTitle()));
 				currPost.addTags(parser.parsePost(currPost.getText()));
@@ -108,6 +107,7 @@ public class RedditCrawler {
 				    PublicContribution<?> thing = it.next().getSubject();
 				    // Do something with each Submission/Comment
 				    Comment currComment = new Comment(thing.getId(), s.getId(), thing.getBody());
+				    currComment.setParentId(currPost.getId());
 				    String url = s.getUrl() + thing.getId();
 				    currComment.setUrl(url);
 				    

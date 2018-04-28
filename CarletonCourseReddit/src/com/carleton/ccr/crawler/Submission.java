@@ -1,8 +1,12 @@
 package com.carleton.ccr.crawler;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class Submission {
+import com.mongodb.BasicDBObject;
+
+public abstract class Submission extends BasicDBObject implements Serializable{
+	private static final long serialVersionUID = 6647438651565912908L;
 	String id;
 	String postId;
 	String url;
@@ -16,7 +20,7 @@ public abstract class Submission {
 		this.text = text;
 		this.tags = new ArrayList<String>();
 	}
-	
+	public Submission(){};
 	public Submission(String id, String url, String text, ArrayList<String> tags){
 		this.id = id;
 		this.url = url;
