@@ -17,7 +17,7 @@ import com.carleton.ccr.db.DatabaseManager;
 public class CourseParser {
 	
 	
-	private static String COURSES_FILE = "courses/courses.txt";
+	private static String COURSES_FILE = "conf/courses.txt";
 	ArrayList<String> courses;
 	private static CourseParser instance;
 	

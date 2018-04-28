@@ -3,9 +3,11 @@ package com.carleton.ccr.crawler;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import com.carleton.ccr.db.DatabaseManager;
 import com.carleton.ccr.parsing.CourseParser;
+import com.carleton.ccr.util.ConfigurationLoader;
 import com.carleton.sentiment.SentimentAnalyzer;
 
 import net.dean.jraw.RedditClient;
@@ -34,7 +36,8 @@ public class RedditCrawler {
 		DatabaseManager db = DatabaseManager.getInstance();
 		UserAgent userAgent = new UserAgent("CarletonUCourseParser", "com.carleton.ccr", "v1.0.0", "carletoncr");
 		
-		Credentials credentials = Credentials.script("carletoncr", "potato123",
+		Properties crawlerProps = ConfigurationLoader.loadCrawlerConfig();
+		Credentials credentials = Credentials.script(crawlerProps.getProperty("username"), crawlerProps.getProperty("userpassword"),
 			    "NfnzPcNUbB-JZQ", "rfqo_FnfRMfLnnwN-pAA6t5YctE");
 		
 		// This is what really sends HTTP requests
