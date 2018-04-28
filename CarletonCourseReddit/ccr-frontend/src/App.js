@@ -6,8 +6,6 @@ import _ from 'lodash';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import TreeView from 'react-treeview';
-import SplitterLayout from 'react-splitter-layout';
-import Divider from 'muicss/lib/react/divider';
 
 var url = "http://localhost:8080/CarletonCourseReddit/ccr/rest/";
 
@@ -57,6 +55,7 @@ class App extends Component {
 
   updateValue(newValue) {
     if (newValue !== null) {
+      this.collapseAll();
       Request.get(url + "courses/categories/"+ newValue.value).then((res) => {
         this.setState({
           selectedSubj:res.body,
@@ -96,7 +95,7 @@ class App extends Component {
           const course = node.courseName;
           const label = <span className="topnode" onClick={this.handleCourseClick.bind(null, i)}>{course}, sentiment : {node.sentiment}</span>
         return (
-            <TreeView nodeLabel={label} key={i} collapsed={!collapseTree[i]} onClick={this.handleCourseClick.bind(null, i)}>
+            <TreeView nodeLabel={label} key={node.className} collapsed={!collapseTree[i]} onClick={this.handleCourseClick.bind(null, i)}>
                 {node.posts.map((post, j) => {return <div><span className="node" onClick={this.handleCommentClick.bind(null,post)} key={j}>{post.text}</span><hr></hr></div>})}
             </TreeView>);
         })}
