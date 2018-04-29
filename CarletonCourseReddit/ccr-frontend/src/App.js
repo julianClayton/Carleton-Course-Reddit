@@ -51,8 +51,12 @@ class App extends Component {
       collapseTree: this.state.collapseTree.map(() => false),
     });
   }
-
-
+  classColour(i) {
+    if (this.state.collapseTree[i]) {
+      return "topnode-selected";
+    }
+    return "topnode";
+  }
   updateValue(newValue) {
     if (newValue !== null) {
       this.collapseAll();
@@ -81,8 +85,9 @@ class App extends Component {
           <h1 className="App-title">Carleton University Course Reddit Finder</h1>
           <h2>See what students are saying about Carleton courses on Reddit! </h2>
         </header>
-        <div>
+        <div className="select-hover">
           <Select
+            className="select-hover"
             name="subject"
             value={this.state.selectValue}
             onChange={this.updateValue}
@@ -93,10 +98,10 @@ class App extends Component {
         <div className="topdiv">
         {this.state.courses.map((node, i) => {
           const course = node.courseName;
-          const label = <span className="topnode" onClick={this.handleCourseClick.bind(null, i)}>{course}, sentiment : {node.sentiment}</span>
+          const label = <span  className={this.classColour(i)} onClick={this.handleCourseClick.bind(null, i)}>{course}, sentiment : {node.sentiment}</span>
         return (
             <TreeView nodeLabel={label} key={node.className} collapsed={!collapseTree[i]} onClick={this.handleCourseClick.bind(null, i)}>
-                {node.posts.map((post, j) => {return <div><span className="node" onClick={this.handleCommentClick.bind(null,post)} key={j}>{post.text}</span><hr></hr></div>})}
+                {node.posts.map((post, j) => {return <div className="comment-div "><span className="node" onClick={this.handleCommentClick.bind(null,post)} key={j}><h3>{post.author} says:</h3><p>{post.text}</p></span><hr></hr></div>})}
             </TreeView>);
         })}
         </div>

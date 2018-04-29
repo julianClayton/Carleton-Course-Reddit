@@ -1,7 +1,7 @@
 package com.carleton.ccr.db;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 
 import com.carleton.ccr.crawler.Comment;
 import com.carleton.ccr.crawler.Post;
@@ -15,14 +15,11 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
-import edu.carleton.comp4601.dao.Document;
-
 
 public class DatabaseManager {
 	
 	private final String DOC_NUM_COL = "docnum";
 	private final String POST_COL = "posts";
-	private final String COMMENT_COL = "comments";
 	private final String COURSE_CATEGORIES = "course-categories";
 	
 	private MongoClient	m;
@@ -88,6 +85,8 @@ public class DatabaseManager {
 				.add("postId", p.getPostId())
 				.add("type", "post")
 				.add("replies", p.getReplies())
+				.add("author", p.getAuthor())
+				.add("datetime", p.getTime())
 				.get();
 
 		col.save(obj);
@@ -109,6 +108,8 @@ public class DatabaseManager {
 				.add("parentId", c.getParentId())
 				.add("postId", c.getPostId())
 				.add("type", "comment")
+				.add("author", c.getAuthor())
+				.add("datetime", c.getTime())
 				.get();
 
 		col.save(obj);
@@ -128,6 +129,10 @@ public class DatabaseManager {
  		//String[] tagsArr = tagString.split(" ");
  		//ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
 		Comment com = new Comment((String) obj.get("id"), (String) obj.get("url"), (String) obj.get("content"), (ArrayList<String>) obj.get("tags"));
+		com.setAuthor((String)obj.get("author"));
+		
+		com.setTime((Date) obj.get("datetime"));
+		System.out.println("TEST: " + (Date) obj.get("datetime"));
 		return com;
 	}
 	
@@ -141,11 +146,12 @@ public class DatabaseManager {
 		if (obj == null) {
 			return null;
 		}
-		//ArrayList<String> tagString = (ArrayList<String>) obj.get("tags");
- 		//String[] tagsArr = tagString.split(" ");
- 		//ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
 		Post post = new Post((String) obj.get("id"), (String) obj.get("url"), (String) obj.get("content"), 
 				(ArrayList<String>) obj.get("tags"), (String) obj.get("title"));
+		post.setAuthor((String)obj.get("author"));
+		post.setTime((Date) obj.get("datetime"));
+		System.out.println("TEST: " + (Date) obj.get("datetime"));
+
 		return post;
 	}
 	

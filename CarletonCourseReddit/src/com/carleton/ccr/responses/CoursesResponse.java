@@ -35,7 +35,7 @@ public class CoursesResponse implements Serializable {
 			this.sentiment = sentiment;
 			ArrayList<Submission> q = MyLucene.query(courseName);
 			for (Submission s : q) {
-				posts.add(new Post(s.getText(), s.getUrl()));
+				posts.add(new Post(s.getText(), s.getUrl(), s.getAuthor(), s.getTime().toString()));
 			}
 		}
 	}
@@ -43,9 +43,13 @@ public class CoursesResponse implements Serializable {
 		private static final long serialVersionUID = 9067440995456044771L;
 		public String text;
 		public String url;
-		public Post(String text, String url) {
+		public String author;
+		public String datetime;
+		public Post(String text, String url, String author, String datetime) {
 			this.text = text;
 			this.url = url;
+			this.author = author;
+			this.datetime = datetime;
 		}
 	}
 }

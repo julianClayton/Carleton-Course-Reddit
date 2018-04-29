@@ -45,8 +45,22 @@
   background-color: #FFF4A2;
   font-weight: bold;
 }
+.topnode-selected {
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  border-radius: 3px;
+  background-color: #E68924;
+  font-weight: bold;
+}
 .topnode:hover {
   background-color: #E68924;
+  cursor: pointer;
+}
+.topnode-selected:hover {
+  background-color: #FFF4A2;
   cursor: pointer;
 }
 .info, .node {
@@ -90,6 +104,21 @@
 .mybutton:hover {
   cursor: pointer;
   background-color: #F3D916;
+}
+.select-hover {
+  
+}
+.select-hover:hover {
+  cursor: pointer;
+}
+.comment-div {
+  text-align: left;
+  padding-left: 5em;
+  padding-right: 5em;
+}
+.comment-div:hover {
+  background-color: rgb(220, 245, 243);
+  cursor: pointer;
 }
 .mybutton:focus {
   outline: none;
