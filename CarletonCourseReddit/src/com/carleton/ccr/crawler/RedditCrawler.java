@@ -92,7 +92,8 @@ public class RedditCrawler {
 				
 				String sentiment= sa.getSentimentFromPost(allText);
 			    currPost.setSentiment(sentiment);
-				
+				currPost.setAuthor(s.getAuthor());
+				currPost.setTime(s.getCreated());
 			    db.addPostToDb(currPost);
 			    
 				SubmissionReference subRef = reddit.submission(s.getId());
@@ -110,7 +111,8 @@ public class RedditCrawler {
 				    currComment.setParentId(currPost.getId());
 				    String url = s.getUrl() + thing.getId();
 				    currComment.setUrl(url);
-				    
+				    currComment.setAuthor(thing.getAuthor());
+				    currComment.setTime(thing.getCreated());
 				    currComment.addTags(tags);
 				    currComment.addTags(currPost.getTags());
 				    
@@ -125,7 +127,6 @@ public class RedditCrawler {
 				    db.addCommentToDb(currComment);
 				}
 			}
-		}
-		
+		}		
 	}
 }

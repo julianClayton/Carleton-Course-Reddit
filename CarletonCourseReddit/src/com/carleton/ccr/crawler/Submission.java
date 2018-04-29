@@ -2,6 +2,7 @@ package com.carleton.ccr.crawler;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.mongodb.BasicDBObject;
 
@@ -13,6 +14,8 @@ public abstract class Submission extends BasicDBObject implements Serializable{
 	String text;
 	String sentiment;
 	ArrayList<String> tags;
+	String author;
+	Date time;
 	
 	public Submission(String id, String url, String text){
 		this.id = id;
@@ -20,7 +23,15 @@ public abstract class Submission extends BasicDBObject implements Serializable{
 		this.text = text;
 		this.tags = new ArrayList<String>();
 	}
+	public Submission(String id, String url, String text, String author){
+		this.id = id;
+		this.url = url;
+		this.text = text;
+		this.tags = new ArrayList<String>();
+		this.author = author;
+	}
 	public Submission(){};
+	
 	public Submission(String id, String url, String text, ArrayList<String> tags){
 		this.id = id;
 		this.url = url;
@@ -63,7 +74,18 @@ public abstract class Submission extends BasicDBObject implements Serializable{
 	public void setSentiment(String sent){
 		this.sentiment = sent;
 	}
-	
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public void setTime(Date date) {
+		this.time = date;
+	}
+	public Date getTime() {
+		return time;
+	}
 	public void addTags(ArrayList<String> moreTags) {
 		for (String tag : moreTags) {
 			if (!tags.contains(tag) && tag != null) {
