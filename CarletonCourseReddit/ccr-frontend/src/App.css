@@ -106,7 +106,9 @@
   background-color: #F3D916;
 }
 .select {
-
+  padding-right: 5em;
+  padding-left: 5em;
+  padding-top: 0.6em;
 }
 .select:hover {
   cursor: pointer;
@@ -186,8 +188,7 @@
 }
 .align-left {
   position: flex;
-  padding-right: 60em;
-    align-items: left;
+  //padding-right: 60em;
   padding-left: 0em;
 }
 

@@ -80,49 +80,49 @@ class App extends Component {
     });
 
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Carleton University Course Reddit Finder</h1>
-          <h2>See what students are saying about Carleton courses on Reddit! </h2>
-        </header>
-        <div>
-          <Tabs>
-            <TabList className="align-left">
-              <Tab>Tab1</Tab>
-              <Tab>Tab2</Tab>
-            </TabList>
-            <div>
-              <TabPanel>
-                <div className="select">
-                  <Select
-                    className="select"
-                    name="subject"
-                    value={this.state.selectValue}
-                    onChange={this.updateValue}
-                    options={subjects}/>
-                </div>
-                <div>
-                <button onClick={this.collapseAll} className="mybutton">Collapse all</button>
-                  <div className="topdiv">
-                    {this.state.courses.map((node, i) => {
-                      const course = node.courseName;
-                      const label = <span  className={this.classColour(i)} onClick={this.handleCourseClick.bind(null, i)}>{course}, sentiment : {node.sentiment}</span>
-                    return (
-                      <TreeView nodeLabel={label} key={node.className} collapsed={!collapseTree[i]} onClick={this.handleCourseClick.bind(null, i)}>
-                          {node.posts.map((post, j) => {return <div className="comment-div "><span className="node" onClick={this.handleCommentClick.bind(null,post)} key={j}><h3>{post.author} says:</h3><p>{post.text}</p></span><hr></hr></div>})}
-                      </TreeView>);})}
-                  </div>
-                </div>
-            </TabPanel>
-              </div>
+      <Tabs>
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Carleton University Course Reddit Finder</h1>
+            <h2>See what students are saying about Carleton courses on Reddit! </h2>
+                        <TabList className="align-left">
+                <Tab>Search</Tab>
+                <Tab>Analytics</Tab>
+              </TabList>
+          </header>
+          <div>
               <div>
                 <TabPanel>
-                </TabPanel>
-            </div>
-          </Tabs>
-        </div>
+                  <div className="select">
+                    <Select
+                      className="select"
+                      name="subject"
+                      value={this.state.selectValue}
+                      onChange={this.updateValue}
+                      options={subjects}/>
+                  </div>
+                  <div>
+                  <button onClick={this.collapseAll} className="mybutton">Collapse all</button>
+                    <div className="topdiv">
+                      {this.state.courses.map((node, i) => {
+                        const course = node.courseName;
+                        const label = <span  className={this.classColour(i)} onClick={this.handleCourseClick.bind(null, i)}>{course}, sentiment : {node.sentiment}</span>
+                      return (
+                        <TreeView nodeLabel={label} key={node.className} collapsed={!collapseTree[i]} onClick={this.handleCourseClick.bind(null, i)}>
+                            {node.posts.map((post, j) => {return <div className="comment-div "><span className="node" onClick={this.handleCommentClick.bind(null,post)} key={j}><h3>{post.author} says:</h3><p>{post.text}</p></span><hr></hr></div>})}
+                        </TreeView>);})}
+                    </div>
+                  </div>
+              </TabPanel>
+                </div>
+                <div>
+                  <TabPanel>
+                  </TabPanel>
+              </div>
+          </div>
       </div>
+    </Tabs>
     );
   }
 }
