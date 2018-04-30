@@ -100,15 +100,23 @@
   text-decoration: none;
   display: inline-block;
   font-size: 12px;
+  float: right;
+  box-sizing:content-box;
+  right: 5%;
+}
+.mybutton-container {
+  float: right;
+  padding-top: 1em;
 }
 .mybutton:hover {
   cursor: pointer;
   background-color: #F3D916;
 }
 .select {
-  padding-right: 5em;
-  padding-left: 5em;
-  padding-top: 0.6em;
+  width: 50%;
+  position: relative;
+  padding-top: 1em;
+  display:inline-block;
 }
 .select:hover {
   cursor: pointer;
@@ -135,7 +143,7 @@
   border-bottom: 1px solid #aaa;
   margin: 0 0 10px;
   padding: 0;
-    position: flex;
+  position: flex;
   align-items: left;
 }
 

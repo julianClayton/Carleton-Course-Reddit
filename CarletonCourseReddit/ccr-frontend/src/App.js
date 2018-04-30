@@ -94,16 +94,18 @@ class App extends Component {
           <div>
               <div>
                 <TabPanel>
-                  <div className="select">
+                  <div >
                     <Select
                       className="select"
+                      class="pull-left"
                       name="subject"
                       value={this.state.selectValue}
                       onChange={this.updateValue}
-                      options={subjects}/>
+                      options={subjects}
+                      />
+                      <div className="mybutton-container"><button onClick={this.collapseAll} className="mybutton">Collapse all</button></div>
                   </div>
                   <div>
-                  <button onClick={this.collapseAll} className="mybutton">Collapse all</button>
                     <div className="topdiv">
                       {this.state.courses.map((node, i) => {
                         const course = node.courseName;
