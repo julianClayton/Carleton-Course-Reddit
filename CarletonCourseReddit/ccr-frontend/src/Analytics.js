@@ -36,7 +36,7 @@ class Analytics extends Component {
     	<div className="pie-div">
     	<h3> Classes per Subject     &nbsp;&nbsp;&nbsp;        Posts per Class</h3>
     	<PieChart width={800} height={400}>
-        <Pie data={this.state.classStats} cx={300} cy={100} innerRadius={40} outerRadius={80} fill="#8884d8"></Pie>
+        <Pie data={this.state.classStats} cx={300} cy={100} innerRadius={40} outerRadius={80} fill="#8884d8"/>
         <Pie data={this.state.postStats} cx={500} cy={100} innerRadius={40} outerRadius={80} fill="#82ca9d"/>
         <Tooltip/>
        </PieChart>
