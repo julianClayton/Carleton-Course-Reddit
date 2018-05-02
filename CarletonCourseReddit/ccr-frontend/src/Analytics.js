@@ -3,10 +3,9 @@ import ReactFC from 'react';
 import './App.css';
 import Request from 'superagent';
 import ReactDOM from 'react-dom';
-import { LineChart, Line,PieChart, Pie, Legend, Toolti } from 'recharts';
+import { LineChart, Line,PieChart, Pie, Legend, Tooltip, Label } from 'recharts';
 
 const url = "http://localhost:8080/CarletonCourseReddit/ccr/rest/analytics/";
-//const {PieChart, Pie, Legend, Tooltip} = Recharts;
 
 class Analytics extends Component {
 	constructor() {
@@ -32,19 +31,17 @@ class Analytics extends Component {
     	});
 	}
 
-
-
-
-
-
   render() {
     return (
+    	<div className="pie-div">
+    	<h3> Classes per Subject     &nbsp;&nbsp;&nbsp;        Posts per Class</h3>
     	<PieChart width={800} height={400}>
-        <Pie data={this.state.classStats} cx={200} cy={200} outerRadius={80} fill="#8884d8" label/>
-        <Pie data={this.state.postStats} cx={500} cy={200} innerRadius={40} outerRadius={80} fill="#82ca9d"/>
+        <Pie data={this.state.classStats} cx={300} cy={100} innerRadius={40} outerRadius={80} fill="#8884d8"></Pie>
+        <Pie data={this.state.postStats} cx={500} cy={100} innerRadius={40} outerRadius={80} fill="#82ca9d"/>
+        <Tooltip/>
        </PieChart>
-			);
-    		
+       </div>
+		);	
 	}
 }
 
