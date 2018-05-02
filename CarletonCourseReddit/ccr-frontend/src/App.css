@@ -196,7 +196,16 @@
 }
 .align-left {
   position: flex;
-  //padding-right: 60em;
   padding-left: 0em;
 }
+.pie-div {
+  align-self: center;
+}
+.recharts-wrapper {
+  margin : 0 auto;
+}
+.pie-label {
+  padding-top: 10em;
+}
+
 

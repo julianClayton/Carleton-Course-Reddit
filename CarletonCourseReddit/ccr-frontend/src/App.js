@@ -7,7 +7,8 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import TreeView from 'react-treeview';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
- 
+import Analytics from "./Analytics";
+
 const url = "http://localhost:8080/CarletonCourseReddit/ccr/rest/";
 
 class App extends Component {
@@ -120,6 +121,7 @@ class App extends Component {
                 </div>
                 <div>
                   <TabPanel>
+                    <Analytics />
                   </TabPanel>
               </div>
           </div>

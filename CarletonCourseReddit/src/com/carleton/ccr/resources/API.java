@@ -8,7 +8,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.carleton.ccr.Analytics.Analytics;
 import com.carleton.ccr.db.DatabaseManager;
+import com.carleton.ccr.responses.AnalyticsResponse;
 import com.carleton.ccr.responses.CoursesResponse;
 import com.carleton.ccr.util.Tuple;
 
@@ -44,5 +46,17 @@ public class API {
 			cr.addCourse(course, dbm.getSentimentForCourse(course));
 		}
 		return cr;
+	}
+	@GET
+	@Path("analytics/classes") 
+	@Produces(MediaType.APPLICATION_JSON)
+	public AnalyticsResponse getClassAnalytics() {
+		return new AnalyticsResponse(Analytics.getNumberOfClassesStats());
+	}
+	@GET
+	@Path("analytics/posts") 
+	@Produces(MediaType.APPLICATION_JSON)
+	public AnalyticsResponse getPostAnalytics() {
+		return new AnalyticsResponse(Analytics.getNumberOfPostsForClassStats());
 	}
 }

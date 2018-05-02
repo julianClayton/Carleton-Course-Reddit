@@ -2,9 +2,13 @@ package com.carleton.ccr.db;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
+import com.carleton.ccr.Analytics.Analytics;
 import com.carleton.ccr.crawler.Comment;
 import com.carleton.ccr.crawler.Post;
+import com.carleton.ccr.crawler.Submission;
+import com.carleton.ccr.lucene.MyLucene;
 import com.carleton.ccr.util.ListUtils;
 import com.carleton.ccr.util.Tuple;
 import com.mongodb.BasicDBObject;
@@ -125,14 +129,10 @@ public class DatabaseManager {
 		if (obj == null) {
 			return null;
 		}
-		//String tagString = (String) obj.get("tags");
- 		//String[] tagsArr = tagString.split(" ");
- 		//ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsArr));
 		Comment com = new Comment((String) obj.get("id"), (String) obj.get("url"), (String) obj.get("content"), (ArrayList<String>) obj.get("tags"));
 		com.setAuthor((String)obj.get("author"));
 		
 		com.setTime((Date) obj.get("datetime"));
-		System.out.println("TEST: " + (Date) obj.get("datetime"));
 		return com;
 	}
 	
@@ -150,7 +150,6 @@ public class DatabaseManager {
 				(ArrayList<String>) obj.get("tags"), (String) obj.get("title"));
 		post.setAuthor((String)obj.get("author"));
 		post.setTime((Date) obj.get("datetime"));
-		System.out.println("TEST: " + (Date) obj.get("datetime"));
 
 		return post;
 	}
@@ -177,6 +176,34 @@ public class DatabaseManager {
 		return courseCategories;
 	}
 
+	public HashMap<String,Integer> loadNumberOfCoursesPerSubject() {
+		ArrayList<String> subjects = loadCourseCategoriesFromDatabase();
+		HashMap<String, Integer> coursesPerSubject = new HashMap<String, Integer>();
+		for (String subject : subjects) {
+			Tuple<String, ArrayList<String>> res = loadCoursesByCategory(subject);
+			ArrayList<String> courses = res.y;
+			if (courses.size() > 0) {
+				coursesPerSubject.put(subject, courses.size());
+			}
+			
+		}
+		
+		return coursesPerSubject;
+	}
+
+	public HashMap<String,Integer> loadNumberOfPostsPerCourse() {
+		ArrayList<String> subjects = loadCourseCategoriesFromDatabase();
+		HashMap<String, Integer> postsPerCourse = new HashMap<String, Integer>();
+		for (String subject : subjects) {
+			Tuple<String, ArrayList<String>> res = loadCoursesByCategory(subject);
+			ArrayList<String> courses = res.y;
+			for (String course : courses) {
+				ArrayList<Submission> q = MyLucene.query(course);
+				postsPerCourse.put(course, q.size());
+			}
+		}
+		return postsPerCourse;
+	}
 	public String getSentimentForCourse(String course) {
 		switchCollection(POST_COL);
 		DBCursor cursor = col.find();
