@@ -23,7 +23,7 @@ class CourseSearcher extends Component {
     };
 
 
-    this.getClasses();
+    this.getSubjects();
     this.updateValue = this.updateValue.bind(this);
     this.handleCourseClick = this.handleCourseClick.bind(this);
     this.collapseAll = this.collapseAll.bind(this);
@@ -31,7 +31,7 @@ class CourseSearcher extends Component {
   }
 
 
-  getClasses() {
+  getSubjects() {
     Request.get(url).then((res) => {
       this.setState({
         subjs: res.body, 
@@ -71,20 +71,6 @@ class CourseSearcher extends Component {
       });
     }
   }
-
-
-	runAnalytics() {
-		Request.get(url + "classes").then((res) => {
-      		this.setState({
-        		classStats: res.body.stats, 
-        	});
-    	});
-    	Request.get(url + "posts").then((res) => {
-      		this.setState({
-        		postStats: res.body.stats, 
-        	});
-    	});
-	}
 
   render() {
     const collapseTree = this.state.collapseTree;

@@ -4,7 +4,6 @@ import './App.css';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Analytics from "./Analytics";
 import CourseSearcher from "./CourseSearcher"
-const url = "http://localhost:8080/CarletonCourseReddit/ccr/rest/";
 
 class App extends Component {
   constructor() {
